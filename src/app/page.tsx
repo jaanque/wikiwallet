@@ -1,9 +1,5 @@
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
-import {
-  RepoIcon,
-  getIconByName
-} from "@/components/Icons";
 import { supabase } from "@/lib/supabase";
 import React from "react";
 
@@ -31,7 +27,6 @@ interface UIProduct {
   name: string;
   description: string;
   image: string;
-  icon: React.ReactNode;
   companies: { name: string; logo: string; color: string }[];
 }
 
@@ -62,25 +57,17 @@ async function getProducts(keyword?: string, page: number = 1): Promise<{ produc
     return { products: [], totalPages: 0 };
   }
 
-  const products: UIProduct[] = (data as unknown as DBProduct[]).map((p) => {
-    const IconComponent = getIconByName(p.icon_name);
-    return {
-      id: p.id,
-      name: p.name,
-      description: p.description,
-      image: p.image_url,
-      icon: (
-        <RepoIcon color={p.icon_color}>
-          <IconComponent className="w-6 h-6" />
-        </RepoIcon>
-      ),
-      companies: p.companies.map((c) => ({
-        name: c.company.name,
-        logo: c.company.logo || "",
-        color: c.company.color
-      }))
-    };
-  });
+  const products: UIProduct[] = (data as unknown as DBProduct[]).map((p) => ({
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    image: p.image_url,
+    companies: p.companies.map((c) => ({
+      name: c.company.name,
+      logo: c.company.logo || "",
+      color: c.company.color
+    }))
+  }));
 
   const totalPages = Math.ceil((count || 0) / ITEMS_PER_PAGE);
 

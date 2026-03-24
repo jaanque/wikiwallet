@@ -12,16 +12,15 @@ interface ProductCardProps {
   name: string;
   description: string;
   companies: Company[];
-  icon: React.ReactNode;
   image: string;
 }
 
-export default function ProductCard({ name, description, companies, icon, image }: ProductCardProps) {
+export default function ProductCard({ name, description, companies, image }: ProductCardProps) {
   return (
     <div className="flex flex-col md:flex-row rounded-[16px] border border-border bg-white dark:bg-[#0a0a0a] transition-colors duration-200 cursor-pointer group overflow-hidden hover:border-muted/50 w-full min-h-[180px]">
       <div className="relative h-48 md:h-auto md:w-64 shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-border/50">
         <Image 
-          src={image || "/banners/macbook.png"} 
+          src={image || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
           alt={`Imagen ilustrativa de ${name}`} 
           fill
           className="object-cover"
@@ -30,19 +29,14 @@ export default function ProductCard({ name, description, companies, icon, image 
       </div>
       
       <div className="flex flex-col flex-1 min-w-0">
-        <div className="flex flex-col p-6 flex-1 relative">
-          <div className="flex items-start gap-4 mb-3">
-            <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-xl bg-muted/5 border border-border/50" aria-hidden="true">
-              {icon}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-bold text-[18px] text-[#111827] dark:text-white leading-snug truncate">
-                {name}
-              </h3>
-              <p className="text-[#64748b] dark:text-[#94a3b8] text-[14px] leading-relaxed line-clamp-2 mt-1">
-                {description}
-              </p>
-            </div>
+        <div className="flex flex-col p-6 flex-1 relative justify-center">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-bold text-[18px] text-[#111827] dark:text-white leading-snug truncate">
+              {name}
+            </h3>
+            <p className="text-[#64748b] dark:text-[#94a3b8] text-[14px] leading-relaxed line-clamp-2 mt-1">
+              {description}
+            </p>
           </div>
         </div>
         
