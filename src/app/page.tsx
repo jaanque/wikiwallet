@@ -144,7 +144,7 @@ export default async function Home({
                 "Todos los productos"
               )}
             </h2>
-            <p className="text-sm text-[#64748b] dark:text-[#94a3b8] mt-1 font-medium">
+            <p className="text-sm text-[#4b5563] dark:text-[#cbd5e1] mt-1 font-medium">
               Encontrados <span className="text-foreground font-bold">{totalCount}</span> productos
             </p>
           </div>
@@ -152,12 +152,12 @@ export default async function Home({
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {products.length > 0 ? (
-            products.map((product: UIProduct) => (
-              <ProductCard key={product.id} {...product} />
+            products.map((product: UIProduct, index: number) => (
+              <ProductCard key={product.id} {...product} priority={index < 2} />
             ))
           ) : (
             <div className="col-span-full py-32 text-center border-2 border-dashed border-border/40 rounded-3xl">
-              <p className="text-[#64748b] dark:text-[#94a3b8] text-lg font-medium">
+              <p className="text-[#4b5563] dark:text-[#cbd5e1] text-lg font-medium">
                 No se encontraron productos para tu búsqueda.
               </p>
             </div>

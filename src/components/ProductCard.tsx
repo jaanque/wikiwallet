@@ -15,9 +15,10 @@ interface ProductCardProps {
   companies: Company[];
   tags: string[];
   image: string;
+  priority?: boolean;
 }
 
-export default function ProductCard({ name, description, companies, tags, image }: ProductCardProps) {
+export default function ProductCard({ name, description, companies, tags, image, priority = false }: ProductCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -37,6 +38,7 @@ export default function ProductCard({ name, description, companies, tags, image 
           src={image || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
           alt={`Imagen ilustrativa de ${name}`} 
           fill
+          priority={priority}
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, 288px"
         />
@@ -48,7 +50,7 @@ export default function ProductCard({ name, description, companies, tags, image 
             <h3 className="font-bold text-[22px] text-[#111827] dark:text-white leading-tight mb-2 group-hover:text-primary transition-colors">
               {name}
             </h3>
-            <p className="text-[#64748b] dark:text-[#94a3b8] text-[15px] leading-relaxed line-clamp-2">
+            <p className="text-[#4b5563] dark:text-[#cbd5e1] text-[15px] leading-relaxed line-clamp-2">
               {description}
             </p>
           </div>
@@ -71,7 +73,7 @@ export default function ProductCard({ name, description, companies, tags, image 
               {companies.slice(0, 8).map((company, index) => (
                 <div 
                   key={index}
-                  role="img"
+                  role="listitem"
                   aria-label={`Logo de ${company.name}`}
                   className="relative w-8 h-8 rounded-[10px] border-2 border-white dark:border-[#0d0d0d] flex items-center justify-center text-[11px] font-bold text-white transition-all duration-300 hover:scale-125 hover:z-50 cursor-help"
                   style={{ 

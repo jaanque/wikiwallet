@@ -27,6 +27,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage <= 1}
+        aria-label="Ir a la página anterior"
         className="flex items-center gap-1 px-4 py-2 rounded-xl border border-border bg-white dark:bg-[#0a0a0a] text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-muted/5 transition-all active:scale-95"
       >
         <ChevronLeft className="w-4 h-4" />
@@ -34,14 +35,15 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       </button>
 
       <div className="flex items-center gap-2">
-        <span className="text-sm text-muted/60">
-          Página <span className="font-semibold text-foreground">{currentPage}</span> de <span className="font-semibold text-foreground">{totalPages}</span>
+        <span className="text-sm text-[#4b5563] dark:text-[#cbd5e1] font-medium">
+          Página <span className="font-bold text-foreground">{currentPage}</span> de <span className="font-bold text-foreground">{totalPages}</span>
         </span>
       </div>
 
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
+        aria-label="Ir a la página siguiente"
         className="flex items-center gap-1 px-4 py-2 rounded-xl border border-border bg-white dark:bg-[#0a0a0a] text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-muted/5 transition-all active:scale-95"
       >
         <span className="hidden sm:inline">Siguiente</span>
