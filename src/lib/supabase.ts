@@ -86,3 +86,31 @@ export async function getTags() {
 
   return data || [];
 }
+
+export async function getProductById(id: string) {
+  const { data, error } = await supabase
+    .from("products")
+    .select(`
+      *,
+      companies:product_companies(company_id, companies(*)),
+      tags:product_tags(tag_id, tags(*))
+    `)
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    console.error("Error fetching product by id:", error);
+    return null;
+  }
+
+  const rawProduct = data as unknown as { 
+    companies: { companies: Company }[]; 
+    tags: { tags: Tag }[];
+  } & Product;
+
+  return {
+    ...rawProduct,
+    companies: rawProduct.companies?.map(pc => pc.companies).filter(Boolean) || [],
+    tags: rawProduct.tags?.map(pt => pt.tags).filter(Boolean) || [],
+  };
+}

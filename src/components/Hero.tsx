@@ -24,7 +24,7 @@ export default function Hero() {
   if (!isMounted) return <header className="h-[400px]" />;
 
   return (
-    <header className="flex flex-col items-center text-center mt-28 mb-20 px-6 relative overflow-visible">
+    <header className="flex flex-col items-center justify-center text-center pt-24 pb-16 px-6 mt-12 mb-16 relative overflow-visible min-h-[45vh]">
       <div className="hero-item flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-12">
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight flex items-center gap-6 md:gap-10 leading-[0.9]">
           WikiWallet
@@ -35,7 +35,7 @@ export default function Hero() {
         </h1>
       </div>
       
-      <p className="hero-item -mt-30 text-muted-foreground text-lg md:text-xl max-w-2xl font-medium leading-relaxed opacity-0">
+      <p className="hero-item mt-8 md:mt-12 text-muted-foreground text-xl md:text-2xl lg:text-3xl max-w-4xl mx-auto font-medium leading-[1.6] text-balance text-center">
         El mapa definitivo para el <span className="text-foreground font-bold">mapeo industrial</span> y la <span className="text-foreground font-bold">cadena de suministro</span>. 
         Mapeamos los proveedores críticos que hacen posible la tecnología más icónica del mercado.
       </p>

@@ -25,12 +25,8 @@ export default async function Page(props: PageProps) {
       <Navbar />
       
       <main className="max-w-[1440px] mx-auto px-6 pb-20 flex-1 w-full">
-        <div className="mb-16">
+        <div className="mb-12">
           <Hero />
-          <p className="mt-8 text-center text-sm text-[#4b5563] dark:text-[#cbd5e1] font-medium max-w-lg mx-auto leading-relaxed">
-            Explora la arquitectura técnica de la industria global. 
-            Mapeamos los componentes clave y proveedores críticos para tus decisiones de inversión.
-          </p>
         </div>
 
         <FilterBar tags={allTags.map(t => t.name)} activeTag={tag} />

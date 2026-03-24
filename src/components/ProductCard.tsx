@@ -36,7 +36,10 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
   };
 
   return (
-    <div className="flex flex-col md:flex-row rounded-[24px] border border-border/60 bg-white dark:bg-[#0a0a0a] transition-all duration-300 cursor-pointer group overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 w-full min-h-[200px]">
+    <div 
+      onClick={() => router.push(`/product/${product.id}`)}
+      className="flex flex-col md:flex-row rounded-[24px] border border-border/60 bg-white dark:bg-[#0a0a0a] transition-all duration-300 cursor-pointer group overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 w-full min-h-[200px]"
+    >
       <div className="relative h-56 md:h-auto md:w-72 shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-border/40">
         <Image 
           src={image_url || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
