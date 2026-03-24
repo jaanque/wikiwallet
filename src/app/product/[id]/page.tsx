@@ -1,5 +1,5 @@
 import { getProductById } from "@/lib/supabase";
-import { fetchCompanyHistory } from "@/lib/alphavantage";
+import { fetchCompanyHistory } from "@/lib/finnhub";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Cpu, Activity, Zap, Factory } from "lucide-react";
@@ -84,7 +84,7 @@ export default async function ProductPage(props: PageProps) {
                Proveedores Críticos
              </h2>
              <p className="text-[#4b5563] dark:text-[#cbd5e1] mt-2 text-sm max-w-lg font-medium">
-               Explora la arquitectura corporativa subyacente de este producto y el rendimiento accionario de cada proveedor. (Datos fidedignos AlphaVantage).
+               Explora la arquitectura corporativa subyacente de este producto y el rendimiento accionario de cada proveedor. (Datos reales por Finnhub).
              </p>
            </div>
         </div>
@@ -120,7 +120,7 @@ export default async function ProductPage(props: PageProps) {
                       </div>
                       
                       <p className="text-[#4b5563] dark:text-[#cbd5e1] leading-relaxed line-clamp-2 md:line-clamp-none font-medium">
-                        {company.role.desc} Entidad confirmada en la cadena de suministros para la manufactura de este producto analizada mediante la API AlphaVantage en tiempo real.
+                        {company.role.desc} Entidad confirmada en la cadena de suministros para la manufactura de este producto analizada mediante la API Finnhub en tiempo real.
                       </p>
                    </div>
 
@@ -133,7 +133,7 @@ export default async function ProductPage(props: PageProps) {
                            </div>
                            <span className="text-[#111827] dark:text-white font-bold mb-2">Faltan Datos de Rendimiento</span>
                            <span className="text-[#4b5563] dark:text-[#cbd5e1] text-sm max-w-sm font-medium">
-                             La gráfica no pudo renderizarse debido a que el límite de la API de AlphaVantage fue excedido o no se encontró el stock. No simulamos gráficas para mantener la precisión.
+                             La gráfica no pudo renderizarse debido a un error de conexión con la API Finnhub o porque el símbolo no fue localizado en el mercado.
                            </span>
                          </div>
                       ) : (
