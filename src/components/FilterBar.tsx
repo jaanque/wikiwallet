@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useRef } from "react";
+import { X } from "lucide-react";
 
 interface FilterBarProps {
   tags: string[];
@@ -32,12 +33,12 @@ export default function FilterBar({ tags, activeTag }: FilterBarProps) {
     <div className="relative mb-8 -mx-6">
       <div 
         ref={scrollRef}
-        className="flex items-center gap-2 overflow-x-auto py-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6"
+        className="flex items-center gap-2 overflow-x-auto py-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6 snap-x"
       >
         <button
           onClick={() => handleTagClick(null)}
           className={`
-            px-7 py-2.5 rounded-full text-[13px] font-bold transition-all duration-300 shrink-0 shadow-sm
+            px-7 py-2.5 rounded-full text-[13px] font-bold transition-all duration-300 shrink-0 shadow-sm snap-start
             ${!activeTag 
               ? "bg-[#111827] text-white dark:bg-white dark:text-black shadow-lg shadow-black/20 scale-105" 
               : "bg-white dark:bg-[#0d0d0d] text-[#64748b] border border-border/60 hover:border-muted hover:text-[#111827] dark:hover:text-white"
@@ -50,9 +51,9 @@ export default function FilterBar({ tags, activeTag }: FilterBarProps) {
         {tags.map((tag) => (
           <button
             key={tag}
-            onClick={() => handleTagClick(tag)}
+            onClick={() => (activeTag === tag ? handleTagClick(null) : handleTagClick(tag))}
             className={`
-              px-7 py-2.5 rounded-full text-[13px] font-bold transition-all duration-300 shrink-0 shadow-sm
+              px-7 py-2.5 rounded-full text-[13px] font-bold transition-all duration-300 shrink-0 shadow-sm snap-start flex items-center gap-2
               ${activeTag === tag
                 ? "bg-[#111827] text-white dark:bg-white dark:text-black shadow-lg shadow-black/20 scale-105"
                 : "bg-white dark:bg-[#0d0d0d] text-[#64748b] border border-border/60 hover:border-muted hover:text-[#111827] dark:hover:text-white"
@@ -60,6 +61,9 @@ export default function FilterBar({ tags, activeTag }: FilterBarProps) {
             `}
           >
             {tag}
+            {activeTag === tag && (
+              <X className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
+            )}
           </button>
         ))}
         

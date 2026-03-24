@@ -45,7 +45,7 @@ async function getTags() {
   return data;
 }
 
-async function getProducts(keyword?: string, page: number = 1, tag?: string): Promise<{ products: UIProduct[], totalPages: number }> {
+async function getProducts(keyword?: string, page: number = 1, tag?: string): Promise<{ products: UIProduct[], totalPages: number, totalCount: number }> {
   const ITEMS_PER_PAGE = 10;
   const from = (page - 1) * ITEMS_PER_PAGE;
   const to = from + ITEMS_PER_PAGE - 1;
@@ -82,7 +82,7 @@ async function getProducts(keyword?: string, page: number = 1, tag?: string): Pr
 
   if (error || !data) {
     console.error("Error fetching products:", JSON.stringify(error, null, 2));
-    return { products: [], totalPages: 0 };
+    return { products: [], totalPages: 0, totalCount: 0 };
   }
 
   const products: UIProduct[] = (data as unknown as DBProduct[]).map((p) => ({
@@ -100,7 +100,7 @@ async function getProducts(keyword?: string, page: number = 1, tag?: string): Pr
 
   const totalPages = Math.ceil((count || 0) / ITEMS_PER_PAGE);
 
-  return { products, totalPages };
+  return { products, totalPages, totalCount: count || 0 };
 }
 
 
@@ -111,7 +111,7 @@ export default async function Home({
 }) {
   const { q, page, tag } = await searchParams;
   const currentPage = Number(page) || 1;
-  const [{ products, totalPages }, allTags] = await Promise.all([
+  const [{ products, totalPages, totalCount }, allTags] = await Promise.all([
     getProducts(q, currentPage, tag),
     getTags()
   ]);
@@ -132,6 +132,24 @@ export default async function Home({
 
         <FilterBar tags={allTags.map(t => t.name)} activeTag={tag} />
         
+        {/* Result Counter & Search Context */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 border-b border-border/40 pb-6">
+          <div>
+            <h2 className="text-2xl font-bold text-[#111827] dark:text-white">
+              {tag ? (
+                <>Ecosistema <span className="text-muted/40">/</span> {tag}</>
+              ) : q ? (
+                <>Buscando <span className="text-muted/40">&quot;</span>{q}<span className="text-muted/40">&quot;</span></>
+              ) : (
+                "Todos los productos"
+              )}
+            </h2>
+            <p className="text-sm text-[#64748b] dark:text-[#94a3b8] mt-1 font-medium">
+              Encontrados <span className="text-foreground font-bold">{totalCount}</span> productos
+            </p>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {products.length > 0 ? (
             products.map((product: UIProduct) => (
