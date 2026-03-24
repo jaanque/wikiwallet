@@ -13,7 +13,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const { name, description, banner_url, companies, tags } = product;
+  const { name, description, image_url, companies, tags } = product;
 
   const handleTagClick = (tag: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,11 +25,12 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
   };
 
   // Helper to generate a stable color if none exists
-  const getCompanyColor = (name: string) => {
+  const getCompanyColor = (companyName: string, companyColor?: string) => {
+    if (companyColor) return companyColor;
     const colors = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#6366f1", "#8b5cf6", "#ec4899"];
     let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    for (let i = 0; i < companyName.length; i++) {
+      hash = companyName.charCodeAt(i) + ((hash << 5) - hash);
     }
     return colors[Math.abs(hash) % colors.length];
   };
@@ -38,7 +39,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
     <div className="flex flex-col md:flex-row rounded-[24px] border border-border/60 bg-white dark:bg-[#0a0a0a] transition-all duration-300 cursor-pointer group overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 w-full min-h-[200px]">
       <div className="relative h-56 md:h-auto md:w-72 shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-border/40">
         <Image 
-          src={banner_url || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
+          src={image_url || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
           alt={`Imagen ilustrativa de ${name}`} 
           fill
           priority={priority}
@@ -77,19 +78,15 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
                 <div 
                   key={index}
                   role="listitem"
-                  aria-label={`Logo de ${company.name}`}
+                  aria-label={`Identificador de ${company.name}`}
                   className="relative w-8 h-8 rounded-[10px] border-2 border-white dark:border-[#0d0d0d] flex items-center justify-center text-[11px] font-bold text-white transition-all duration-300 hover:scale-125 hover:z-50 cursor-help overflow-hidden"
                   style={{ 
-                    backgroundColor: getCompanyColor(company.name),
+                    backgroundColor: getCompanyColor(company.name, company.color),
                     zIndex: 10 - index
                   }}
                   title={company.name}
                 >
-                  {company.logo_url ? (
-                    <Image src={company.logo_url} alt="" width={32} height={32} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{company.name.substring(0, 1)}</span>
-                  )}
+                  {company.logo_letter || company.name.substring(0, 1)}
                 </div>
               ))}
             </div>

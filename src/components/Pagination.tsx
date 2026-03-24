@@ -28,7 +28,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage <= 1}
         aria-label="Ir a la página anterior"
-        className="flex items-center gap-1 px-4 py-2 rounded-xl border border-border bg-white dark:bg-[#0a0a0a] text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-muted/5 transition-all active:scale-95"
+        className="flex items-center gap-1 px-4 py-2 rounded-xl border border-border bg-white dark:bg-[#0a0a0a] text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-muted/5 transition-all active:scale-95 translate-y-0 hover:-translate-y-0.5"
       >
         <ChevronLeft className="w-4 h-4" />
         <span className="hidden sm:inline">Anterior</span>
@@ -44,7 +44,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
         aria-label="Ir a la página siguiente"
-        className="flex items-center gap-1 px-4 py-2 rounded-xl border border-border bg-white dark:bg-[#0a0a0a] text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed hover:bg-muted/5 transition-all active:scale-95"
+        className="flex items-center gap-1 px-4 py-2 rounded-xl border border-border bg-white dark:bg-[#0a0a0a] text-sm font-medium disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer hover:bg-muted/5 transition-all active:scale-95 translate-y-0 hover:-translate-y-0.5"
       >
         <span className="hidden sm:inline">Siguiente</span>
         <ChevronRight className="w-4 h-4" />

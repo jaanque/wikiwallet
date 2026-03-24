@@ -1,27 +1,24 @@
-"use client";
-
-import { use } from "react";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import FilterBar from "@/components/FilterBar";
 import Pagination from "@/components/Pagination";
 import Footer from "@/components/Footer";
-import { getProducts, getTags, type Product } from "@/lib/supabase";
+import { getProducts, getTags } from "@/lib/supabase";
 
 interface PageProps {
   searchParams: Promise<{ q?: string; tag?: string; page?: string }>;
 }
 
-export default function Page(props: PageProps) {
-  const searchParams = use(props.searchParams);
+export default async function Page(props: PageProps) {
+  const searchParams = await props.searchParams;
   const q = searchParams.q || "";
   const tag = searchParams.tag || "";
   const page = parseInt(searchParams.page || "1");
   const limit = 10;
 
-  const { products, totalCount } = use(getProducts(q, tag, page, limit));
-  const allTags = use(getTags());
+  const { products, totalCount } = await getProducts(q, tag, page, limit);
+  const allTags = await getTags();
 
   return (
     <div className="min-h-screen bg-background selection:bg-primary/10 flex flex-col">
@@ -57,7 +54,7 @@ export default function Page(props: PageProps) {
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {products.map((product: Product, index: number) => (
+          {products.map((product, index) => (
             <ProductCard 
               key={product.id} 
               product={product} 

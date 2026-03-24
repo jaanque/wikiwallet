@@ -8,7 +8,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export interface Company {
   id: string;
   name: string;
-  logo_url?: string;
+  logo_letter?: string;
+  color?: string;
 }
 
 export interface Tag {
@@ -20,7 +21,7 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  banner_url: string;
+  image_url: string;
   created_at: string;
   companies?: Company[];
   tags?: Tag[];
