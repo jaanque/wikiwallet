@@ -12,10 +12,11 @@ interface ProductCardProps {
   name: string;
   description: string;
   companies: Company[];
+  tags: string[];
   image: string;
 }
 
-export default function ProductCard({ name, description, companies, image }: ProductCardProps) {
+export default function ProductCard({ name, description, companies, tags, image }: ProductCardProps) {
   return (
     <div className="flex flex-col md:flex-row rounded-[16px] border border-border bg-white dark:bg-[#0a0a0a] transition-colors duration-200 cursor-pointer group overflow-hidden hover:border-muted/50 w-full min-h-[180px]">
       <div className="relative h-48 md:h-auto md:w-64 shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-border/50">
@@ -42,9 +43,16 @@ export default function ProductCard({ name, description, companies, image }: Pro
         
         <div className="px-6 py-3 bg-[#fcfdfe] dark:bg-[#0d0d0d] border-t border-border/40">
           <div className="flex items-center justify-between gap-4">
-            <span className="text-[10px] font-semibold text-muted/60 uppercase tracking-wider shrink-0">
-              Ecosistema
-            </span>
+            <div className="flex flex-wrap gap-1.5 max-h-5 overflow-hidden items-center">
+              {tags.map((tag, index) => (
+                <span 
+                  key={index} 
+                  className="px-2 py-0.5 rounded-full bg-muted/10 border border-border/40 text-[9px] font-bold text-muted-foreground uppercase tracking-wider shrink-0"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
             <div className="flex -space-x-2 group-hover:space-x-1.5 transition-all duration-500 ease-out" role="list" aria-label="Lista de empresas componentes">
               {companies.slice(0, 8).map((company, index) => (
                 <div 

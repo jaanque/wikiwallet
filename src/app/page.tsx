@@ -1,8 +1,8 @@
+import FilterBar from "@/components/FilterBar";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import { supabase } from "@/lib/supabase";
 import React from "react";
-
 import Pagination from "@/components/Pagination";
 
 interface DBCompany {
@@ -20,6 +20,7 @@ interface DBProduct {
   icon_name: string;
   icon_color: string;
   companies: { company: DBCompany }[];
+  tags: { tag: { name: string } }[];
 }
 
 interface UIProduct {
@@ -28,24 +29,51 @@ interface UIProduct {
   description: string;
   image: string;
   companies: { name: string; logo: string; color: string }[];
+  tags: string[];
 }
 
-async function getProducts(keyword?: string, page: number = 1): Promise<{ products: UIProduct[], totalPages: number }> {
+async function getTags() {
+  const { data, error } = await supabase
+    .from("tags")
+    .select("*")
+    .order("name");
+
+  if (error) {
+    console.error("Error fetching tags:", error);
+    return [];
+  }
+  return data;
+}
+
+async function getProducts(keyword?: string, page: number = 1, tag?: string): Promise<{ products: UIProduct[], totalPages: number }> {
   const ITEMS_PER_PAGE = 10;
   const from = (page - 1) * ITEMS_PER_PAGE;
   const to = from + ITEMS_PER_PAGE - 1;
 
+  // Si hay un tag, usamos !inner para filtrar solo esos productos
+  // Si no hay tag, usamos el join normal para que salgan TODOS los productos (aunque no tengan tags)
+  const selectQuery = tag 
+    ? `
+      *,
+      companies:product_companies(company:companies(*)),
+      tags:product_tags!inner(tag:tags!inner(*))
+    `
+    : `
+      *,
+      companies:product_companies(company:companies(*)),
+      tags:product_tags(tag:tags(*))
+    `;
+
   let query = supabase
     .from("products")
-    .select(`
-      *,
-      companies:product_companies(
-        company:companies(*)
-      )
-    `, { count: 'exact' });
+    .select(selectQuery, { count: 'exact' });
 
   if (keyword) {
     query = query.or(`name.ilike.%${keyword}%,description.ilike.%${keyword}%`);
+  }
+
+  if (tag) {
+    query = query.eq('tags.tag.name', tag);
   }
 
   const { data, count, error } = await query
@@ -53,7 +81,7 @@ async function getProducts(keyword?: string, page: number = 1): Promise<{ produc
     .range(from, to);
 
   if (error || !data) {
-    console.error("Error fetching products:", error);
+    console.error("Error fetching products:", JSON.stringify(error, null, 2));
     return { products: [], totalPages: 0 };
   }
 
@@ -66,7 +94,8 @@ async function getProducts(keyword?: string, page: number = 1): Promise<{ produc
       name: c.company.name,
       logo: c.company.logo || "",
       color: c.company.color
-    }))
+    })),
+    tags: p.tags?.map((t) => t.tag.name) || []
   }));
 
   const totalPages = Math.ceil((count || 0) / ITEMS_PER_PAGE);
@@ -74,21 +103,25 @@ async function getProducts(keyword?: string, page: number = 1): Promise<{ produc
   return { products, totalPages };
 }
 
+
 export default async function Home({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string, page?: string }>;
+  searchParams: Promise<{ q?: string, page?: string, tag?: string }>;
 }) {
-  const { q, page } = await searchParams;
+  const { q, page, tag } = await searchParams;
   const currentPage = Number(page) || 1;
-  const { products, totalPages } = await getProducts(q, currentPage);
+  const [{ products, totalPages }, allTags] = await Promise.all([
+    getProducts(q, currentPage, tag),
+    getTags()
+  ]);
 
   return (
     <main className="min-h-screen bg-[#fcfdfe] dark:bg-[#060606]">
       <Navbar />
-
+      
       <div className="max-w-[1440px] mx-auto px-6 pt-10 pb-16">
-        <div className="max-w-3xl mb-16 mx-auto text-center">
+        <div className="max-w-3xl mb-12 mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-[#111827] dark:text-white mb-6 tracking-tight">
             Ecosistema de Inversiones <span className="text-muted/40">WikiWallet</span>
           </h1>
@@ -97,7 +130,9 @@ export default async function Home({
           </p>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 mt-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <FilterBar tags={allTags.map(t => t.name)} activeTag={tag} />
+        
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-10 mt-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
           {products.length > 0 ? (
             products.map((product: UIProduct) => (
               <ProductCard key={product.id} {...product} />
