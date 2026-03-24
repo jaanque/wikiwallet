@@ -3,6 +3,7 @@
 import { Moon, Sun, MintifyLogo, Search } from "./Icons";
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 function SearchInput() {
   const router = useRouter();
@@ -56,10 +57,10 @@ export default function Navbar() {
 
   return (
     <nav className="flex items-center justify-between px-6 py-3 max-w-[1440px] mx-auto w-full border-b border-border/50 mb-8 gap-4">
-      <div className="flex items-center gap-2 shrink-0">
+      <Link href="/" className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity">
         <MintifyLogo className="w-8 h-8 text-foreground" />
         <span className="font-bold text-xl tracking-tight hidden sm:block">wikiwallet</span>
-      </div>
+      </Link>
 
       <Suspense fallback={<div className="flex-1 max-w-md h-10 bg-muted/5 rounded-xl border border-border animate-pulse" />}>
         <SearchInput />

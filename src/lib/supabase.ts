@@ -10,6 +10,7 @@ export interface Company {
   name: string;
   logo_letter?: string;
   color?: string;
+  symbol?: string;
 }
 
 export interface Tag {

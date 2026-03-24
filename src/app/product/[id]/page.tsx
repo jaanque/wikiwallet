@@ -2,8 +2,7 @@ import { getProductById } from "@/lib/supabase";
 import { fetchCompanyHistory } from "@/lib/alphavantage";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowLeft, Cpu, Activity, Zap, Factory } from "lucide-react";
+import { Cpu, Activity, Zap, Factory } from "lucide-react";
 import CompanyChart from "@/components/CompanyChart";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -30,7 +29,7 @@ export default async function ProductPage(props: PageProps) {
   // Fetch charts in parallel for all companies
   const companiesWithHistory = await Promise.all(
     (product.companies || []).map(async (company, index) => {
-      const history = await fetchCompanyHistory(company.name);
+      const history = await fetchCompanyHistory(company.name, company.symbol);
       return {
         ...company,
         history,
@@ -45,14 +44,6 @@ export default async function ProductPage(props: PageProps) {
 
       <main className="max-w-[1440px] w-full mx-auto px-6 pb-32 pt-8 md:pt-12">
         {/* Main Product Hero */}
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 mb-8 text-muted-foreground hover:text-foreground transition-colors text-sm font-semibold"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Volver al mapa principal
-        </Link>
-        
         <div className="flex flex-col lg:flex-row bg-white dark:bg-[#0a0a0a] rounded-[32px] border border-border/60 overflow-hidden shadow-sm mb-16 hover:border-border transition-all">
            <div className="relative w-full lg:w-1/2 min-h-[400px] bg-muted/5 border-b lg:border-b-0 lg:border-r border-border/40">
              <Image 
@@ -99,7 +90,7 @@ export default async function ProductPage(props: PageProps) {
         </div>
 
         <div className="grid grid-cols-1 gap-6">
-           {companiesWithHistory.map((company, index) => {
+           {companiesWithHistory.map((company) => {
               const color = company.color || "#3b82f6";
               const hasData = company.history && company.history.length > 0;
 
