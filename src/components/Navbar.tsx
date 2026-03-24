@@ -56,7 +56,7 @@ export default function Navbar() {
   }, [isDark]);
 
   return (
-    <nav className="flex items-center justify-between px-6 py-3 max-w-7xl mx-auto w-full border-b border-border/50 mb-8 gap-4">
+    <nav className="flex items-center justify-between px-6 py-3 max-w-[1440px] mx-auto w-full border-b border-border/50 mb-8 gap-4">
       <div className="flex items-center gap-2 shrink-0">
         <MintifyLogo className="w-8 h-8 text-foreground" />
         <span className="font-bold text-xl tracking-tight hidden sm:block">wikiwallet</span>

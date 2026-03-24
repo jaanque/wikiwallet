@@ -1,6 +1,6 @@
-import { Moon, Sun, Search, ArrowRight, Star, Car, Smartphone, Laptop, Gamepad2 } from "lucide-react";
+import { Moon, Sun, Search, ArrowRight, Star, Car, Smartphone, Laptop, Gamepad2, ChevronLeft, ChevronRight } from "lucide-react";
 
-export { Moon, Sun, Search, ArrowRight, Star, Car, Smartphone, Laptop, Gamepad2 };
+export { Moon, Sun, Search, ArrowRight, Star, Car, Smartphone, Laptop, Gamepad2, ChevronLeft, ChevronRight };
 
 export function getIconByName(name: string) {
   switch (name) {
