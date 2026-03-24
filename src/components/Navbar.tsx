@@ -10,7 +10,6 @@ function SearchInput() {
   const q = searchParams.get("q") || "";
   const [searchQuery, setSearchQuery] = useState(q);
 
-  // Sync searchQuery with URL params if they change externally (e.g. back button)
   useEffect(() => {
     setSearchQuery(q);
   }, [q]);
@@ -31,14 +30,14 @@ function SearchInput() {
   return (
     <div className="flex-1 max-w-md relative">
       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-        <Search className="h-4 w-4 text-muted" />
+        <Search className="h-4 w-4 text-[#4b5563] dark:text-[#cbd5e1]" />
       </div>
       <input
         type="text"
         placeholder="Buscar productos o empresas..."
         value={searchQuery}
         onChange={handleSearch}
-        className="block w-full pl-10 pr-3 py-2 border border-border rounded-xl bg-muted/5 text-sm placeholder:text-muted/60 focus:outline-hidden focus:ring-2 focus:ring-primary/5 transition-all"
+        className="block w-full pl-10 pr-3 py-2 border border-border rounded-xl bg-muted/5 text-sm placeholder:text-[#4b5563]/60 focus:outline-hidden focus:ring-2 focus:ring-primary/5 transition-all"
       />
     </div>
   );
@@ -68,10 +67,10 @@ export default function Navbar() {
 
       <button
         onClick={() => setIsDark(!isDark)}
-        className="p-2 rounded-lg hover:bg-hover-bg transition-colors border border-border shrink-0"
+        className="p-2 rounded-lg hover:bg-muted/10 transition-colors border border-border shrink-0"
         aria-label="Toggle theme"
       >
-        {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+        {isDark ? <Sun className="w-5 h-5 text-white" /> : <Moon className="w-5 h-5 text-[#4b5563]" />}
       </button>
     </nav>
   );

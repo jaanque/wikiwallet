@@ -30,6 +30,7 @@
     --hover-bg: #111827;
   }
 }
+
 html {
   scrollbar-gutter: stable;
 }
@@ -51,4 +52,3 @@ body {
 .dark .glass {
   background: rgba(0, 0, 0, 0.7);
 }
-

@@ -2,40 +2,43 @@
 
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-
-interface Company {
-  name: string;
-  logo: string;
-  color: string;
-}
+import { type Product } from "@/lib/supabase";
 
 interface ProductCardProps {
-  name: string;
-  description: string;
-  companies: Company[];
-  tags: string[];
-  image: string;
+  product: Product;
   priority?: boolean;
 }
 
-export default function ProductCard({ name, description, companies, tags, image, priority = false }: ProductCardProps) {
+export default function ProductCard({ product, priority = false }: ProductCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  const { name, description, banner_url, companies, tags } = product;
 
   const handleTagClick = (tag: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     const params = new URLSearchParams(searchParams.toString());
     params.set("tag", tag);
-    params.delete("page"); // Reset to first page
+    params.delete("page");
     router.push(`/?${params.toString()}`);
+  };
+
+  // Helper to generate a stable color if none exists
+  const getCompanyColor = (name: string) => {
+    const colors = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b", "#6366f1", "#8b5cf6", "#ec4899"];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
   };
 
   return (
     <div className="flex flex-col md:flex-row rounded-[24px] border border-border/60 bg-white dark:bg-[#0a0a0a] transition-all duration-300 cursor-pointer group overflow-hidden hover:border-primary/20 hover:shadow-xl hover:shadow-primary/5 w-full min-h-[200px]">
       <div className="relative h-56 md:h-auto md:w-72 shrink-0 overflow-hidden border-b md:border-b-0 md:border-r border-border/40">
         <Image 
-          src={image || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
+          src={banner_url || "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800"} 
           alt={`Imagen ilustrativa de ${name}`} 
           fill
           priority={priority}
@@ -59,30 +62,34 @@ export default function ProductCard({ name, description, companies, tags, image,
         <div className="px-8 py-4 bg-[#fcfdfe]/50 dark:bg-[#0d0d0d]/50 border-t border-border/40">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex flex-wrap gap-2">
-              {tags.map((tag, index) => (
+              {tags?.map((tagObj, index) => (
                 <button 
                   key={index} 
-                  onClick={(e) => handleTagClick(tag, e)}
+                  onClick={(e) => handleTagClick(tagObj.name, e)}
                   className="px-3 py-1 rounded-full bg-primary/5 hover:bg-primary/10 border border-primary/10 text-[10px] font-bold text-primary uppercase tracking-wider transition-all hover:scale-105 cursor-pointer"
                 >
-                  {tag}
+                  {tagObj.name}
                 </button>
               ))}
             </div>
             <div className="flex -space-x-2.5 group-hover:-space-x-1 transition-all duration-500 ease-out" role="list" aria-label="Lista de empresas componentes">
-              {companies.slice(0, 8).map((company, index) => (
+              {companies?.slice(0, 8).map((company, index) => (
                 <div 
                   key={index}
                   role="listitem"
                   aria-label={`Logo de ${company.name}`}
-                  className="relative w-8 h-8 rounded-[10px] border-2 border-white dark:border-[#0d0d0d] flex items-center justify-center text-[11px] font-bold text-white transition-all duration-300 hover:scale-125 hover:z-50 cursor-help"
+                  className="relative w-8 h-8 rounded-[10px] border-2 border-white dark:border-[#0d0d0d] flex items-center justify-center text-[11px] font-bold text-white transition-all duration-300 hover:scale-125 hover:z-50 cursor-help overflow-hidden"
                   style={{ 
-                    backgroundColor: company.color,
+                    backgroundColor: getCompanyColor(company.name),
                     zIndex: 10 - index
                   }}
                   title={company.name}
                 >
-                  {company.logo || company.name.substring(0, 1)}
+                  {company.logo_url ? (
+                    <Image src={company.logo_url} alt="" width={32} height={32} className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{company.name.substring(0, 1)}</span>
+                  )}
                 </div>
               ))}
             </div>
